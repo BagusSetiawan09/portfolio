@@ -1,0 +1,19 @@
+@use "../abstracts/index" as *;
+
+.sw-button {
+    color: var(--White);
+    position: relative;
+    z-index: 5;
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--Line);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    @include transition3();
+    &:hover {
+        border-color: var(--White);
+    }
+}

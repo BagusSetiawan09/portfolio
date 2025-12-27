@@ -1,0 +1,99 @@
+@use "../abstracts/index" as *;
+
+.hover-underline-link {
+    --underline-position-y: calc(100% - 1px);
+    --underline-height: 2px;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(90deg, currentColor 0, currentColor 100%);
+    background-position: 100% var(--underline-position-y);
+    background-size: 100% var(--underline-height);
+    &:hover {
+        animation: qode-inline-underline-initial-hover 0.8s
+            cubic-bezier(0.57, 0.39, 0, 0.86) 1 forwards;
+    }
+    @keyframes qode-inline-underline-initial-hover {
+        0% {
+            background-position: 100% var(--underline-position-y);
+            background-size: 100% var(--underline-height);
+        }
+
+        35% {
+            background-position: 100% var(--underline-position-y);
+            background-size: 0 var(--underline-height);
+        }
+
+        36% {
+            background-position: 0 var(--underline-position-y);
+            background-size: 0 var(--underline-height);
+        }
+
+        100% {
+            background-position: 0 var(--underline-position-y);
+            background-size: 100% var(--underline-height);
+        }
+    }
+}
+
+
+
+.hover-line-text {
+    display: inline;
+    @include transition5();
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(currentColor),
+        color-stop(98%, currentColor)
+    );
+    background-image: linear-gradient(
+        to bottom,
+        currentColor 0%,
+        currentColor 98%
+    );
+    background-size: 0 2px;
+    background-repeat: no-repeat;
+    background-position: left 94%;
+    &:hover {
+        background-size: 100% 2px;
+    }
+}
+
+.hover-image {
+    .img-style,
+    .article-thumb {
+        position: relative;
+        overflow: hidden;
+        &:after {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 0%;
+            left: 50%;
+            top: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%) rotate(-45deg);
+            z-index: 1;
+            pointer-events: none;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 1s;
+        }
+    }
+    &:hover {
+        .img-style,
+        .article-thumb {
+            &:after {
+                height: 250%;
+                transition: all 600ms linear;
+                background-color: transparent;
+            }
+            img {
+                transform: scale(1.1);
+            }
+        }
+    }
+}

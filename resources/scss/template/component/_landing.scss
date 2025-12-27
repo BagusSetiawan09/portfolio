@@ -1,0 +1,178 @@
+@use "../abstracts/index" as *;
+
+.page-title-landing {
+    .page-inner {
+        background-image: url(../images/landing/page-title.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 282px 0 283px;
+        margin-bottom: -87px;
+        @include res(xl) {
+            padding: 220px 0;
+        }
+        @include res(md) {
+            padding: 140px 0;
+        }
+    }
+    .title {
+        font-size: clamp(42px, 8vw, 102px);
+        line-height: clamp(52px, 9.7vw, 140px);
+        margin-bottom: 32px;
+    }
+    .desc {
+        font-size: clamp(16px, 3.5vw, 30px);
+        line-height: clamp(24px, 3.8vw, 42px);
+    }
+    .btn_wrapper {
+        max-width: max-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .btn-view-all {
+        width: 167px;
+        height: 167px;
+        @include flex(center, center);
+        border-radius: 50%;
+        flex-direction: column;
+        z-index: 4;
+        background-color: var(--Primary);
+        .text {
+            margin-bottom: 8px;
+            z-index: 2;
+            position: relative;
+            color: var(--Secondary);
+        }
+        i {
+            font-size: 32px;
+            color: var(--Secondary);
+        }
+        .text,
+        i {
+            @include transition3();
+        }
+        .bg-effect {
+            background: var(--Secondary);
+        }
+        &:hover {
+            background-color: var(--Secondary);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            .text,
+            i {
+                color: var(--White);
+            }
+        }
+        @include res(sm) {
+            width: 135px;
+            height: 135px;
+            i {
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.home-box {
+    padding: 16px 16px 22px;
+    background-color: #161616;
+    border-radius: 16px;
+    text-align: center;
+    .img-style {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    .tf-btn {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        bottom: 38px;
+        z-index: 3;
+        border-radius: 8px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition-delay: 0.18s;
+        height: 52px;
+        padding: 0 52px;
+    }
+    .dot-top {
+        display: flex;
+        justify-content: center;
+        gap: 7px;
+        margin-bottom: 12px;
+    }
+    .dot {
+        width: 8px;
+        height: 8px;
+        background-color: var(--White);
+        border-radius: 50%;
+    }
+    &:hover {
+        .thumbs {
+            &::after {
+                height: 131px;
+            }
+        }
+        .tf-btn {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+}
+
+.section-box-home {
+    .title-section {
+        margin-bottom: 56px;
+        @include res(md) {
+            margin-bottom: 30px;
+        }
+    }
+    .tf-grid-layout {
+        @include res(xl, min) {
+            gap: 48px;
+        }
+    }
+}
+
+.footer.style-landing {
+    .wrap-partner-infinity {
+        margin-top: 127px;
+        margin-bottom: -50px;
+        @include res(sm) {
+            margin-top: 50px;
+            margin-bottom: -82px;
+        }
+    }
+    .footer-inner {
+        background-image: url(../../images/landing/footer.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .footer-body {
+        padding-top: 267px;
+        padding-bottom: 121px;
+        @include res(md) {
+            padding-top: 155px;
+            padding-bottom: 80px;
+        }
+    }
+    .footer-bottom {
+        padding-bottom: 48px;
+    }
+    .tf-btn {
+        margin-top: 80px;
+        padding: 0 32px;
+        @include res(md) {
+            margin-top: 40px;
+        }
+        .btn-text {
+            margin-left: -23px;
+        }
+    }
+}

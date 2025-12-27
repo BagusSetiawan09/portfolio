@@ -1,0 +1,74 @@
+@use "../abstracts/index" as *;
+
+form {
+    position: relative;
+    z-index: 30;
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
+    input[type="url"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="color"] {
+        font-family: $font-main-2;
+        outline: 0;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        border: unset;
+        width: 100%;
+        padding: 8px 19px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+        background-color: var(--Color-F5F5F5);
+        border-radius: 16px;
+        color: var(--Secondary);
+        overflow: hidden;
+        margin-bottom: 0;
+        height: 56px;
+        padding: 17px 16px;
+        &::placeholder {
+            color: var(--Text-body);
+        }
+    }
+    button,
+    input[type="button"],
+    input[type="reset"],
+    input[type="submit"] {
+        background-color: transparent;
+        overflow: hidden;
+        padding: 0;
+    }
+    textarea {
+        height: 100px;
+        padding-top: 12px;
+    }
+}
+
+.form-contact {
+    background-color: var(--White);
+    border-radius: 24px;
+    padding: 46px 48px 48px;
+    .title {
+        margin-bottom: 33px;
+    }
+    label {
+        margin-bottom: 12px;
+    }
+    .tf-btn {
+        padding: 0 39px 0 30px;
+        margin-bottom: 30px;
+    }
+    @include res(md) {
+        padding: 24px 15px;
+    }
+}

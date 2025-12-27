@@ -1,0 +1,139 @@
+@use "../abstracts/index" as *;
+
+.footer {
+    .bot {
+        gap: 12px;
+        margin-top: 30px;
+        text-align: center;
+        @include res(lg, min) {
+            p {
+                text-wrap: nowrap;
+            }
+        }
+        @include res(lg) {
+            flex-direction: column;
+        }
+    }
+    .line {
+        display: block;
+        max-width: 270px;
+        background-color: var(--Line);
+        height: 1px;
+        width: 100%;
+    }
+
+    &.style-2 {
+        background-color: #111111;
+        .footer-body {
+            border-bottom: 1px solid var(--Line);
+        }
+        .col-tes {
+            .tes-footer {
+                border-right: 1px solid var(--Line);
+                .desc {
+                    margin-bottom: 30px;
+                    max-width: 341px;
+                }
+                @include res(md) {
+                    border-right: unset;
+                }
+            }
+        }
+        .tes-footer,
+        .footer-contact,
+        .footer-social {
+            padding-top: 81px;
+            padding-bottom: 86px;
+            @include res(lg) {
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+        }
+        .footer-contact {
+            @include res(md) {
+                padding-top: 0;
+                padding-bottom: 0px;
+            }
+        }
+        .footer-social {
+            border-left: 1px solid var(--Line);
+            display: flex;
+            justify-content: space-between;
+
+            @include res(lg, min) {
+                padding-left: 30px;
+            }
+            @include res(xl, min) {
+                padding-left: 75px;
+            }
+            @include res(lg) {
+                border: unset;
+                max-width: 549px;
+            }
+        }
+        .footer-bottom {
+            padding-top: 72px;
+            padding-bottom: 80px;
+        }
+
+        .tf-social {
+            max-width: 88px;
+        }
+        .footer-contact {
+            display: grid;
+            gap: 32px;
+        }
+    }
+    &.style-3 {
+        display: grid;
+        gap: 49px;
+        .text {
+            @include res(xl, min) {
+                line-height: 83px;
+            }
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--Line);
+            padding-bottom: 48px;
+            flex-wrap: wrap;
+            gap: 16px;
+            > div {
+                a {
+                    font-size: clamp(28px, 3.5vw, 50px);
+                    line-height: clamp(34px, 4.5vw, 65px);
+                }
+            }
+            @include res(md) {
+                padding-top: 0;
+                padding-bottom: 30px;
+            }
+            @include res(sm) {
+                flex-direction: column;
+                align-items: start;
+            }
+        }
+
+        .button-link {
+            height: 85px;
+            width: 85px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            border-radius: 50%;
+            background: var(--Primary);
+            color: var(--Secondary);
+            @include res(md) {
+                height: 60px;
+                width: 60px;
+                font-size: 32px;
+            }
+        }
+        @include res(lg) {
+            gap: 34px;
+        }
+    }
+}

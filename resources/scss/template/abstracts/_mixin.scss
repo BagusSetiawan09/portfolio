@@ -1,0 +1,165 @@
+@use "sass:map";
+
+@mixin flex($alignItem, $justifyContent) {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: $alignItem;
+    justify-content: $justifyContent;
+}
+
+@mixin grid($loop, $num, $row-gap, $col-gap) {
+    display: grid;
+    grid-template-columns: repeat($loop, $num);
+    gap: $row-gap $col-gap;
+}
+
+@mixin centered() {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+@mixin center($x, $y) {
+    -webkit-transform: translate($x, $y);
+    -moz-transform: translate($x, $y);
+    -ms-transform: translate($x, $y);
+    -o-transform: translate($x, $y);
+    transform: translate($x, $y);
+}
+
+// Property prefix
+@mixin prefix($property, $value, $prefixes: ()) {
+    @each $prefix in $prefixes {
+        #{'-' + $prefix + '-' + $property}: $value;
+    }
+    #{$property}: $value;
+}
+
+$breakpoints: (
+    "sm": 575px,
+    "md": 767px,
+    "lg": 991px,
+    "llg": 1024px,
+    "xl": 1199px,
+    "xxl": 1440px,
+    "xxxl": 1599px,
+    "full": 1920px,
+);
+
+$breakpoints-min: (
+    "sm": 576px,
+    "md": 768px,
+    "lg": 992px,
+    "llg": 1025px,
+    "xl": 1200px,
+    "xxl": 1441px,
+    "xxxl": 1600px,
+    "full": 1921px,
+);
+
+@mixin res($size, $type: max, $size2: null) {
+    @if $type==max {
+        $breakpoint: map.get($breakpoints, $size);
+
+        @if $breakpoint {
+            @media (max-width: $breakpoint) {
+                @content;
+            }
+        }
+    } @else if $type==min {
+        $breakpoint: map.get($breakpoints-min, $size);
+
+        @if $breakpoint {
+            @media (min-width: $breakpoint) {
+                @content;
+            }
+        }
+    } @else if $type==between and $size2 !=null {
+        // min, between, max
+        $min: map.get($breakpoints-min, $size);
+        $max: map.get($breakpoints, $size2);
+
+        @if $min and $max {
+            @media (min-width: $min) and (max-width: $max) {
+                @content;
+            }
+        }
+    }
+}
+
+// --------------------------
+
+@mixin transition1() {
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -ms-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
+    transition: all 0.1s ease;
+}
+
+@mixin transition2() {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+@mixin transition3() {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+@mixin transition4() {
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+@mixin transition5() {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+@mixin hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@mixin visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+@mixin transition-cubic-1() {
+    -webkit-transition: 1s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -khtml-transition: 1s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -moz-transition: 1s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -ms-transition: 1s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -o-transition: 1s cubic-bezier(0.63, 0.25, 0.25, 1);
+    transition: 1s cubic-bezier(0.63, 0.25, 0.25, 1);
+}
+
+@mixin transition-cubic-2() {
+    -webkit-transition: 1.5s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -khtml-transition: 1.5s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -moz-transition: 1.5s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -ms-transition: 1.5s cubic-bezier(0.63, 0.25, 0.25, 1);
+    -o-transition: 1.5s cubic-bezier(0.63, 0.25, 0.25, 1);
+    transition: 1.5s cubic-bezier(0.63, 0.25, 0.25, 1);
+}

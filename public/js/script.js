@@ -324,3 +324,13 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener("mouseleave", () => document.body.classList.remove("cursor-ready"));
   window.addEventListener("mouseenter", () => document.body.classList.add("cursor-ready"));
 })();
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".side-info-close, .offcanvas-overlay")) {
+    document.querySelectorAll(".side-toggle").forEach((el) => {
+      el.classList.remove("open");
+      el.setAttribute("aria-expanded", "false");
+    });
+  }
+});
+

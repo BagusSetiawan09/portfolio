@@ -1,0 +1,92 @@
+@use "../abstracts/index" as *;
+.side-menu-mobile {
+    background: var(--Secondary) none repeat scroll 0 0;
+    padding: 40px 45px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    -webkit-transform: translatey(calc(-100%));
+    -moz-transform: translatey(calc(-100%));
+    -ms-transform: translatey(calc(-100%));
+    -o-transform: translatey(calc(-100%));
+    transform: translatey(calc(-100%));
+    -webkit-transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
+    -moz-transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
+    transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
+    z-index: 999;
+    overflow-y: scroll;
+    overscroll-behavior-y: contain;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    .menu-link {
+        font-size: clamp(30px, 4vw, 56px);
+        line-height: clamp(46px, 5.2vw, 73px);
+        color: var(--White);
+        &.active {
+            color: var(--Primary);
+            &.hover-line-text {
+                background-size: 100% 2px;
+            }
+        }
+    }
+    .menu-body {
+        flex: 1;
+        height: 100%;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    &.show {
+        opacity: 1;
+        transform: (translateX(0));
+    }
+    .menu-content {
+        padding-top: 48px;
+        padding-bottom: 41px;
+        display: flex;
+        flex-direction: column;
+    }
+    .nav-menu-list {
+        display: grid;
+        gap: 24px;
+        @include res(md) {
+            row-gap: 12px;
+        }
+    }
+    .menu-bot_left {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px 32px;
+        @include res(lg) {
+            column-gap: 12px;
+        }
+    }
+    .br-dot {
+        display: block;
+        width: 4px;
+        height: 4px;
+        background-color: var(--White);
+        border-radius: 50%;
+    }
+    .menu-footer {
+        @include res(md) {
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+    }
+    @include res(xl, min) {
+        .nav-menu-list {
+            padding-bottom: 140px;
+        }
+    }
+}

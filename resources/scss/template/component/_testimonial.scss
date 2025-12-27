@@ -1,0 +1,169 @@
+@use "../abstracts/index" as *;
+
+.testimonial-item {
+    .box-left {
+        border-radius: 32px;
+        overflow: hidden;
+        position: relative;
+        .author {
+            position: absolute;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            background-color: var(--Secondary);
+            border-radius: 32px;
+            padding: 8px;
+            .name {
+                margin-bottom: 3px;
+            }
+        }
+        .img-style {
+            width: 100%;
+            img {
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+    .box-right {
+        display: flex;
+        gap: 42px;
+        .icon {
+            font-size: 82px;
+            color: var(--Primary);
+        }
+        .sub {
+            margin-bottom: 48px;
+        }
+        @include res(lg) {
+            gap: 32px;
+            .icon {
+                font-size: 60px;
+            }
+        }
+        @include res(md) {
+            margin-top: 40px;
+            gap: 24px;
+            .icon {
+                font-size: 40px;
+            }
+            .sub {
+                margin-bottom: 24px;
+            }
+        }
+    }
+    .sw-thumbs-pagi {
+        max-width: 292px;
+        margin: 0;
+        .swiper-slide {
+            width: auto;
+            cursor: pointer;
+        }
+    }
+    .wrap-nav {
+        padding-top: 48px;
+        margin-top: 48px;
+        border-top: 1px solid var(--Line);
+        .thumbs-pagi {
+            border-radius: 50%;
+            overflow: hidden;
+            height: 64px;
+            width: 64px;
+            img {
+                @include transition3();
+            }
+        }
+        .swiper-slide-thumb-active {
+            .thumbs-pagi {
+                img {
+                    transform: scale(1.3);
+                }
+            }
+        }
+        @include res(lg) {
+            padding-top: 24px;
+            margin-top: 24px;
+            .thumbs-pagi {
+                height: 54px;
+                width: 54px;
+            }
+        }
+    }
+    .tf-thumb-tes {
+        margin-left: 77px;
+    }
+    .wrap-nav {
+        margin-left: 200px;
+    }
+    @include res(xl) {
+        .tf-thumb-tes {
+            margin-left: 0;
+        }
+        .wrap-nav {
+            margin-left: 0;
+        }
+    }
+    &.style-2,
+    &.style-3 {
+        background-color: rgba(17, 17, 17, 1);
+        padding: 32px;
+        border-radius: 32px;
+        display: grid;
+        gap: 24px;
+        max-width: 572px;
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .heading,
+        p {
+            margin-bottom: 23px;
+        }
+    }
+    &.style-3 {
+        gap: 24px;
+        padding: 24px;
+        background-color: transparent;
+        border: 1px solid var(--Line);
+        border-radius: 0;
+    }
+}
+
+.wrap-testimonial {
+    .infiniteslide {
+        gap: 12px;
+    }
+}
+
+.section-testimonials-2 {
+    .heading-section {
+        p {
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+}
+
+.section-testimonials-3 {
+    .tf-grid-layout {
+        position: relative;
+        &::after {
+            position: absolute;
+            content: "";
+            height: 266px;
+            width: 100%;
+            background: linear-gradient(
+                180deg,
+                rgba(8, 8, 7, 0) 0%,
+                #080807 100%
+            );
+            bottom: 0;
+        }
+    }
+
+    .infiniteslide {
+        height: 674px;
+        gap: 32px;
+    }
+}

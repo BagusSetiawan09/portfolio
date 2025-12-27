@@ -3327,3 +3327,21 @@ body.cursor-down .cursorRing{
   body{ cursor: none; }
   a, button{ cursor: none; }
 }
+
+// Adjust page title padding to account for fixed header
+
+i[class^="ri-"], i[class*=" ri-"]{
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arr-1, .arr-2{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-title { padding-top: 110px; }
+@media (max-width: 991px){ .page-title { padding-top: 90px; } }

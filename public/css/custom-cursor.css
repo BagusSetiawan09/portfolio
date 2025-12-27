@@ -1,0 +1,49 @@
+/* Hide default cursor (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+}
+
+/* Base cursor elements */
+.cursorDot,
+.cursorRing{
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  opacity: 0;               /* biar nggak nongol di pojok kiri */
+  will-change: transform;
+}
+
+/* show only after first mousemove */
+body.has-cursor .cursorDot,
+body.has-cursor .cursorRing{
+  opacity: 1;
+}
+
+.cursorDot{
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b7ff00;
+}
+
+.cursorRing{
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #b7ff00;
+  box-shadow: 0 0 18px rgba(183,255,0,.35);
+}
+
+/* click feedback */
+body.is-clicking .cursorRing{
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
+/* Optional: hide on touch devices (mobile) */
+@media (hover: none) and (pointer: coarse) {
+  .cursorDot, .cursorRing { display: none !important; }
+  body { cursor: auto; }
+}
