@@ -321,12 +321,12 @@
         var innerBars = document.querySelectorAll(".inner-bar");
         var increment = 0;
 
-         if (!preloader || innerBars.length === 0) return;
+        //  if (!preloader || innerBars.length === 0) return;
 
         function animateBars() {
             for (var i = 0; i < 2; i++) {
                 var randomWidth = Math.floor(Math.random() * 101);
-                if (!bar) continue;
+                // if (!bar) continue;
                 gsap.to(innerBars[i + increment], {
                     width: randomWidth + "%",
                     duration: 0.5,
