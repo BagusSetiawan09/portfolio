@@ -1,6 +1,6 @@
 @props([
   'id' => 'work',
-  'title' => null, // optional kalau mau tambah heading sendiri
+  'title' => null, // optional kalau mau tambah heading
   'items' => null,
 
   // default href kalau item tidak punya href

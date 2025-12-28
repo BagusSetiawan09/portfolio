@@ -32,7 +32,6 @@
   <link rel="shortcut icon" href="{{ asset('assets/template/images/favicon.svg') }}">
   <link rel="apple-touch-icon-precomposed" href="{{ asset('assets/template/images/favicon.svg') }}">
 
-  {{-- CSS kamu (override di paling bawah supaya tampilan tidak berubah) --}}
   {{-- <link rel="stylesheet" href="{{ asset('css/custom.css') }}"> --}}
   <link rel="stylesheet" href="{{ asset('css/override.css') }}">
   <link rel="stylesheet" href="{{ asset('css/custom-cursor.css') }}">

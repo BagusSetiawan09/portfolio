@@ -21,10 +21,8 @@
     if (empty($v)) return '';
     if (Str::startsWith($v, ['http://','https://'])) return $v;
 
-    // kalau kamu kirim "images/..." (dari template), kita prefix jadi "assets/template/images/..."
     if (Str::startsWith($v, 'images/')) return asset('assets/template/' . $v);
 
-    // kalau sudah "assets/..." atau "css/..." dll
     return asset($v);
   };
 

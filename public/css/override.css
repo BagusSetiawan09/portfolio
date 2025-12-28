@@ -40,7 +40,6 @@
   /* text-transform: uppercase; */
 }
 
-/* pastikan tombol template muncul & posisinya benar */
 .progress-wrap{
   position: fixed;
   right: 24px;
@@ -51,7 +50,6 @@
   z-index: 9999;
 }
 
-/* bikin panah remix icon tampil di tengah */
 .progress-wrap::after{
   content: "\ea76"; /* ri-arrow-up-line (Remix Icon) */
   font-family: "remixicon" !important;
@@ -65,17 +63,15 @@
   width: 54px;
   height: 54px;
 
-  color: #fff;         /* sesuaikan */
+  color: #fff;
   z-index: 2;
 }
 
-/* ring svg tetap di belakang icon */
 .progress-wrap svg{
   position: relative;
   z-index: 1;
 }
 
-/* Paksa reset tombol progress-wrap */
 body .progress-wrap{
   position: fixed !important;
   right: 24px !important;
@@ -88,13 +84,11 @@ body .progress-wrap{
   z-index: 9999 !important;
 }
 
-/* Hilangkan icon bawaan template (kalau ada) */
 body .progress-wrap::before{
   content: none !important;
   display: none !important;
 }
 
-/* Icon Remix: center bener-bener */
 body .progress-wrap::after{
   content: "\ea76" !important; /* ri-arrow-up-line */
   font-family: "remixicon" !important;
@@ -109,7 +103,6 @@ body .progress-wrap::after{
   font-size: 22px !important;
   line-height: 1 !important;
 
-  /* NUDGE: karena glyph arrow biasanya “terasa naik” secara visual */
   transform: translateY(1px) !important;
 
   color: #fff !important;
@@ -117,7 +110,6 @@ body .progress-wrap::after{
   pointer-events: none !important;
 }
 
-/* SVG ring jangan ikut nggeser layout */
 body .progress-wrap svg{
   position: absolute !important;
   inset: 0 !important;
@@ -127,36 +119,31 @@ body .progress-wrap svg{
   pointer-events: none !important;
 }
 
-/* matikan bawaan template karena kamu pakai custom cursor */
 #preloader,
 .cursor1,
 .cursor2{
   display:none !important;
 }
 
-/* override.css */
 .preloader{ 
   display:none !important; 
 }
 
-/* Navbar brand (Bagus Setiawan) */
 .header-2 .header-left.logo .brand-text{
   color: #fff;
   font-weight: 600;
-  font-size: 18px;          /* naikkan sesuai selera */
+  font-size: 18px;
   letter-spacing: .2px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
-  height: 54px;             /* samakan dengan tinggi header */
+  height: 54px;
 }
 
-/* rapihin jarak kiri kanan header */
 .header-2 .container-2{
   align-items: center;
 }
 
-/* mobile: sedikit lebih kecil biar muat */
 @media (max-width: 575.98px){
   .header-2 .header-left.logo .brand-text{
     font-size: 16px;

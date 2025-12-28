@@ -3,7 +3,6 @@
   'title' => 'Client Reviews',
   'subtitle' => "Based on reviews from over\n500 customers",
 
-  // optional gambar kecil di bawah judul (kalau template punya)
   'badgeImage' => 'images/section/review-customer.png',
 
   // data testimoni (opsional override dari parent)
@@ -18,7 +17,6 @@
   // ]
   'items' => null,
 
-  // default avatar pravatar id (kalau item tidak punya avatar)
   'defaultAvatarId' => 45,
 ])
 
@@ -63,8 +61,6 @@
     ],
   ];
 
-  // supaya sesuai template (dua baris), kita buat 2 track
-  // baris kedua pakai urutan kebalik biar terlihat beda
   $dataTop = $data;
   $dataBottom = array_reverse($data);
 
@@ -72,7 +68,7 @@
   $avatarUrl = function($t) use ($src, $defaultAvatarId) {
     if (!empty($t['avatar'])) return $src($t['avatar']);
     $id = (int)($t['avatar_id'] ?? $defaultAvatarId);
-    $id = max(1, min(70, $id)); // pravatar biasanya 1-70 aman
+    $id = max(1, min(70, $id));
     return "https://i.pravatar.cc/120?img={$id}";
   };
 
@@ -119,7 +115,6 @@
 
 <section id="{{ $id }}" class="section-testimonials-2 tf-spacing-4 section" aria-label="Testimonials">
   <div class="heading-section mb_57">
-    {{-- template biasanya pakai split-text effect-blur-fade, ini boleh tetap --}}
     <h1 class="title text-center mb_21 split-text effect-blur-fade">{{ $title }}</h1>
 
     <div class="d-flex align-items-center gap_13 justify-content-center animateFade">
@@ -139,7 +134,7 @@
     </div>
   </div>
 
-  {{-- ROW 2 (right) - ini yang bikin sesuai template --}}
+  {{-- ROW 2 (right) --}}
   <div class="wrap-testimonial">
     <div class="infiniteslide" data-clone="3" data-style="right">
       @foreach($dataBottom as $t)

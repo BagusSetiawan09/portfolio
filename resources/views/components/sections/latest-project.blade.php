@@ -40,8 +40,6 @@
     ],
   ];
 
-  // template biasanya menampilkan 2 item besar (dua kolom)
-  // kalau kamu kasih lebih dari 2, tetap akan dirender berurutan.
 @endphp
 
 <section id="{{ $id }}" class="section-project tf-spacing-4" aria-label="Latest Project">
@@ -67,7 +65,6 @@
         @endphp
 
         <div class="project-item">
-          {{-- Template kadang menukar urutan konten/gambar di item ke-2, tapi tidak wajib --}}
           @if($i % 2 === 1)
             <div class="content">
               <a href="{{ $href }}" class="h3 text_white mb_7 link">{{ $titleText }}</a>

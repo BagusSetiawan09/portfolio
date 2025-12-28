@@ -2,7 +2,6 @@
   'firstName' => 'Bagus',
   'lastName' => 'Setiawan',
 
-  // Pakai path template (tanpa bikin URL luar)
   'imageUrl' => 'images/hero/hero-img.png',
   'imageAlt' => 'Hero image',
 
@@ -17,7 +16,7 @@
   'sideTitle2' => 'Developer',
   'location' => 'Based in Indonesia',
 
-  // samakan dengan ID section yang kamu pakai (work / project)
+  // samakan dengan ID section (work / project)
   'viewAllHref' => '#project',
 
   // marquee
@@ -28,7 +27,7 @@
 @php
   use Illuminate\Support\Str;
 
-  // resolver path gambar: kalau "images/..." berarti ambil dari assets/template/images/...
+  // resolver path gambar: "images/..." berarti ambil dari assets/template/images/...
   $src = function ($v) {
     if (empty($v)) return '';
     if (Str::startsWith($v, ['http://', 'https://'])) return $v;
@@ -60,7 +59,6 @@
 
       <div class="content-wrap">
         <div class="content">
-          {{-- Ini HARUS div.hero-title seperti template --}}
           <div class="hero-title text_white split-text split-lines-rotation-x">
             I’m {{ $firstName }} <br>{{ $lastName }}
 
@@ -73,7 +71,6 @@
             {{ $description }}
           </p>
 
-          {{-- Ikuti class tombol template --}}
           <a href="{{ $hireHref }}" class="tf-btn btn-bg-primary btn-hover-animation-fill animateFade">
             <span>
               <i class="ri-arrow-right-line arr-1"></i>
@@ -108,7 +105,6 @@
     </div>
   </div>
 
-  {{-- Marquee wajib masih “nempel” di dalam .page-title (seperti template) --}}
   <div class="wrap-partner-infinity">
     <div class="wrap-marquee bg-primary-color marquee-1">
       <div class="infiniteslide" data-clone="2" data-style="left">

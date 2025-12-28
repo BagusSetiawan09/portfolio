@@ -12,7 +12,6 @@
 
     if (Str::startsWith($v, ['http://', 'https://'])) return $v;
 
-    // kalau kamu passing "images/..." artinya ambil dari assets/template/images/...
     if (Str::startsWith($v, 'images/')) return asset('assets/template/' . $v);
 
     return asset($v);

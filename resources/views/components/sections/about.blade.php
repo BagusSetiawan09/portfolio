@@ -15,7 +15,7 @@
   // garis dekorasi
   'lineImage' => 'images/section/line.png',
 
-  // counter bawah (agar fleksibel)
+  // counter bawah
   'counters' => [
     ['value' => 99,  'suffix' => '%', 'label' => "CODE\nACCURACY"],
     ['value' => 87,  'suffix' => '',  'label' => "PROJECT\nDEPLOYED"],
@@ -66,7 +66,7 @@
       </div>
     </div>
 
-    {{-- ROW 2 (gambar + desc + counter) => ini yang bikin layout kamu sama seperti template --}}
+    {{-- ROW 2 (gambar + desc + counter) --}}
     <div class="row justify-content-end">
       <div class="col-xxl-10">
         <div class="box-about">

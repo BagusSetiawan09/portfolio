@@ -7,7 +7,7 @@
 
   'quote' => '“ I can help you build an impressive website that boosts business results. “',
 
-  // bisa URL atau 'images/avatar/avatar-7.png'
+  // bisa URL atau 'images/avatar/img-footer.png'
   'avatar' => 'images/avatar/img-footer.png',
 
   // gambar dekor footer (opsional, bisa URL atau images/...)

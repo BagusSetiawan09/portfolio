@@ -2,7 +2,6 @@
   const dots = Array.from(document.querySelectorAll(".cursorDot"));
   const rings = Array.from(document.querySelectorAll(".cursorRing"));
 
-  // Hapus semua duplikat, sisakan 1 saja
   dots.slice(0, -1).forEach((el) => el.remove());
   rings.slice(0, -1).forEach((el) => el.remove());
 })();
@@ -31,7 +30,7 @@
   const onMove = (e) => {
     targetX = e.clientX;
     targetY = e.clientY;
-    document.body.classList.add("has-cursor"); // baru munculin setelah gerak
+    document.body.classList.add("has-cursor");
     setPos(dot, targetX, targetY);
   };
 
