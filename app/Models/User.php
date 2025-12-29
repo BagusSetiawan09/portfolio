@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Panel;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // hanya izinkan akses ke panel id "admin"
+        if ($panel->getId() !== 'admin') {
+            return false;
+        }
+
+        // whitelist email admin
+        return in_array($this->email, [
+            'bagussetiawan.lz24@gmail.com',
+        ], true);
     }
 }
