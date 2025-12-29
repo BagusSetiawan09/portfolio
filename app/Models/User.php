@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true; // <-- PAKSA BOLEH (TES)
+        return $this->email === 'bagussetiawan.lz24@gmail.com';
     }
 }
