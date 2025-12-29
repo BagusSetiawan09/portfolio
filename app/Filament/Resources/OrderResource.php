@@ -18,6 +18,21 @@ class OrderResource extends Resource
     protected static ?string $navigationGroup = 'Orders';
     protected static ?int $navigationSort = 1;
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email', 'whatsapp'];
+    }
+
+    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    {
+        return [
+            'Status' => $record->status,
+            'Service' => $record->service,
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -104,6 +119,9 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null) 
+            ->recordAction(Tables\Actions\ViewAction::class)
+
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
@@ -204,22 +222,53 @@ class OrderResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\Action::make('mark_in_progress')
-                    ->label('In Progress')
-                    ->icon('heroicon-o-arrow-path')
-                    ->color('info')
-                    ->visible(fn ($record) => $record->status === 'new')
-                    ->action(fn ($record) => $record->update(['status' => 'in_progress'])),
+                // --- ACTION GROUP ---
+                Tables\Actions\ActionGroup::make([
 
-                Tables\Actions\Action::make('mark_done')
-                    ->label('Done')
-                    ->icon('heroicon-o-check')
-                    ->color('success')
-                    ->visible(fn ($record) => in_array($record->status, ['new','in_progress'], true))
-                    ->action(fn ($record) => $record->update(['status' => 'done'])),
+                    Tables\Actions\Action::make('invoice')
+                        ->label('Download PDF')
+                        ->icon('heroicon-m-document-arrow-down')
+                        ->color('success')
+                        ->url(fn (Order $record) => route('order.invoice', $record))
+                        ->openUrlInNewTab(),
+                    
+                    // 1. Detail
+                    Tables\Actions\ViewAction::make()
+                        ->label('Detail')
+                        ->color('info')
+                        ->icon('heroicon-m-eye')
+                        ->slideOver(),
+                    
+                    // 2. Custom Action: In Progress
+                    Tables\Actions\Action::make('mark_in_progress')
+                        ->label('In Progress')
+                        ->icon('heroicon-m-arrow-path')
+                        ->color('info')
+                        ->visible(fn ($record) => $record->status === 'new')
+                        ->action(fn ($record) => $record->update(['status' => 'in_progress'])),
 
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                    // 3. Custom Action: Done
+                    Tables\Actions\Action::make('mark_done')
+                        ->label('Done')
+                        ->icon('heroicon-m-check')
+                        ->color('success')
+                        ->visible(fn ($record) => in_array($record->status, ['new','in_progress'], true))
+                        ->action(fn ($record) => $record->update(['status' => 'done'])),
+
+                    // 4. Edit
+                    Tables\Actions\EditAction::make()
+                        ->color('warning')
+                        ->icon('heroicon-m-pencil-square'),
+
+                    // 5. Delete
+                    Tables\Actions\DeleteAction::make()
+                        ->icon('heroicon-m-trash'),
+
+                ])
+                ->label('Actions')
+                ->icon('heroicon-m-ellipsis-vertical')
+                ->color('dark')
+                ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

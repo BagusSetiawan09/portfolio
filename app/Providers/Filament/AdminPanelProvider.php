@@ -42,7 +42,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
 
             ->assets([
-                // Kita pakai cdnjs (Cloudflare) yang lebih ngebut & stabil
                 Css::make('leaflet-css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css'),
                 Js::make('leaflet-js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'),
             ])

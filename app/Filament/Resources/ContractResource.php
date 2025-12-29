@@ -20,6 +20,21 @@ class ContractResource extends Resource
     protected static ?string $navigationGroup = 'Documents';
     protected static ?int $navigationSort = 20;
 
+    protected static ?string $recordTitleAttribute = 'number';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['number', 'client_name', 'project_title'];
+    }
+
+    public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+    {
+        return [
+            'Client' => $record->client_name,
+            'Project' => $record->project_title,
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -133,6 +148,9 @@ class ContractResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null)
+            ->recordAction(Tables\Actions\ViewAction::class)
+
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
@@ -176,7 +194,30 @@ class ContractResource extends Resource
                     ->sortable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // --- ACTION GROUP ---
+                Tables\Actions\ActionGroup::make([
+                    
+                    // 1. Detail
+                    Tables\Actions\ViewAction::make()
+                        ->label('Detail')
+                        ->color('info')
+                        ->icon('heroicon-m-eye')
+                        ->slideOver(),
+
+                    // 2. Edit
+                    Tables\Actions\EditAction::make()
+                        ->color('warning')
+                        ->icon('heroicon-m-pencil-square'),
+
+                    // 3. Delete
+                    Tables\Actions\DeleteAction::make()
+                        ->icon('heroicon-m-trash'),
+
+                ])
+                ->label('Actions')
+                ->icon('heroicon-m-ellipsis-vertical')
+                ->color('dark')
+                ->button()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
