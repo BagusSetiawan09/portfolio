@@ -40,18 +40,30 @@
         @if($logoSrc)
           <img src="{{ $logoSrc }}" alt="{{ $brand }}">
         @else
-          {{-- <span class="text-white">{{ $brand }}</span> --}}
           <span class="brand-text">{{ $brand }}</span>
         @endif
       </a>
     </div>
 
-    <div class="header-right d-flex gap_8">
+    {{-- RIGHT SIDE --}}
+    <div class="header-right d-flex align-items-center gap_8">
       <div class="tag-title d-inline-flex align-items-center gap_8 md-hide" aria-label="Availability">
         <span class="point" aria-hidden="true"></span>
         <p class="text-body-2 text_white">{{ $availableText }}</p>
       </div>
 
+      {{-- ORDER BUTTON --}}
+      <a
+        href="#"
+        class="link-no-action nav-order-btn"
+        data-order-open
+        aria-label="Order"
+        title="Order"
+      >
+        <i class="ri-shopping-bag-3-line" aria-hidden="true"></i>
+      </a>
+
+      {{-- HAMBURGER --}}
       <a
         href="#"
         class="link-no-action side-toggle"
@@ -72,10 +84,6 @@
 <div class="side-menu-mobile" id="sideMenu" aria-hidden="true">
   <div class="tf-container h-100">
     <div class="menu-content h-100">
-      {{-- <button type="button" class="side-info-close link-no-action" aria-label="Close menu">
-        <i class="ri-close-line" aria-hidden="true"></i>
-      </button> --}}
-
       <div class="menu-body">
         <ul class="nav-menu-list text-center">
           @foreach($links as $l)

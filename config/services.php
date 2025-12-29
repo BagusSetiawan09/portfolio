@@ -35,4 +35,33 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+    'enabled' => env('WHATSAPP_ENABLED', false),
+    'to' => env('WHATSAPP_TO'),
+
+    'cloud' => [
+        'token' => env('WHATSAPP_CLOUD_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_CLOUD_PHONE_NUMBER_ID'),
+        'version' => env('WHATSAPP_CLOUD_VERSION', 'v21.0'),
+        ],
+    ],
+
+    'admin' => [
+        // koma-separated email admin yang akan terima notif dashboard
+        'emails' => env('ADMIN_EMAILS', ''),
+    ],
+
+    'whatsapp' => [
+        'enabled' => env('WHATSAPP_ENABLED', false),
+
+        // nomor WA tujuan (koma-separated). Format: 6289xxxx (tanpa +)
+        'recipients' => env('WHATSAPP_RECIPIENTS', ''),
+
+        'cloud' => [
+            'token' => env('WHATSAPP_CLOUD_TOKEN'),
+            'phone_number_id' => env('WHATSAPP_CLOUD_PHONE_NUMBER_ID'),
+            'version' => env('WHATSAPP_CLOUD_VERSION', 'v21.0'),
+        ],
+    ],
+
 ];

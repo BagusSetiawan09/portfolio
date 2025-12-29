@@ -1,6 +1,6 @@
 @props([
   'id' => 'work',
-  'title' => null, // optional kalau mau tambah heading
+  'title' => null,
   'items' => null,
 
   // default href kalau item tidak punya href
@@ -17,14 +17,7 @@
     return asset($v);
   };
 
-  // format item:
-  // [
-  //   'title' => 'Portfolio Item',
-  //   'img' => 'https://...' atau 'images/portfolio/portfolio-9.jpg',
-  //   'href' => '#',
-  //   'tags' => ['Web Application','UI'],
-  // ]
-  $data = $items ?? [
+  $default = [
     [
       'title' => 'Website SMKS PAB 2 Helvetia',
       'img'   => 'images/portfolio/portfolio-9.jpg',
@@ -38,25 +31,40 @@
       'tags'  => ['Landing Page', 'Wordpress'],
     ],
     [
-      'title' => 'Bali Inter Gas',
-      'img'   => 'images/portfolio/portfolio-11.jpg',
-      'href'  => $defaultHref,
-      'tags'  => ['Landing Page', 'Wordpress'],
-    ],
-    [
-      'title' => 'Jakarta Indo Service',
-      'img'   => 'images/portfolio/portfolio-11.jpg',
-      'href'  => $defaultHref,
-      'tags'  => ['Landing Page', 'Wordpress'],
-    ],
-    [
       'title' => 'Gunung Aroma',
       'img'   => 'images/portfolio/portfolio-11.jpg',
       'href'  => $defaultHref,
       'tags'  => ['Design', 'Social Media'],
     ],
   ];
+
+  $data = $items;
+
+  // normalize collection -> array
+  if ($data instanceof \Illuminate\Support\Collection) {
+    $data = $data->all();
+  }
+
+  // fallback kalau kosong
+  if (empty($data)) {
+    $data = $default;
+  }
+
+  // normalize item DB (Project model) -> format component
+  $data = collect($data)->map(function ($it) use ($defaultHref) {
+    if ($it instanceof \App\Models\Project) {
+      $it = $it->toArray();
+    }
+
+    return [
+      'title' => $it['title'] ?? 'Portfolio',
+      'img'   => $it['img'] ?? $it['image_url'] ?? null,
+      'href'  => $it['href'] ?? $it['link_url'] ?? $defaultHref,
+      'tags'  => $it['tags'] ?? [],
+    ];
+  })->all();
 @endphp
+
 
 <section id="{{ $id }}" class="section-portfoli-1 tf-spacing-5 section" aria-label="Portfolio">
   <div class="tf-container">
@@ -74,13 +82,23 @@
       @foreach($data as $it)
         @php
           $href = $it['href'] ?? $defaultHref;
-          $img  = $src($it['img'] ?? '');
+
+          // support field img / image_url
+          $imgRaw = $it['img'] ?? ($it['image_url'] ?? '');
+          $img  = $src($imgRaw);
+
+          // support tags array / string
           $tags = $it['tags'] ?? [];
+          if (is_string($tags)) {
+            $tags = array_values(array_filter(array_map('trim', explode(',', $tags))));
+          }
+          if (!is_array($tags)) $tags = [];
+
           $name = $it['title'] ?? 'Portfolio';
         @endphp
 
         <div class="portfolio-item style-2">
-          <a href="{{ $href }}" class="img-style scale-img" aria-label="{{ $name }}">
+          <a href="{{ $href }}" class="img-style scale-img" aria-label="{{ $name }}" @if(Str::startsWith($href, ['http://','https://'])) target="_blank" rel="noopener" @endif>
             @if($img)
               <img
                 src="{{ $img }}"
@@ -94,13 +112,17 @@
           </a>
 
           <div class="content">
-            <a href="{{ $href }}" class="mb_16 title link">{{ $name }}</a>
+            <a href="{{ $href }}" class="mb_16 title link" @if(Str::startsWith($href, ['http://','https://'])) target="_blank" rel="noopener" @endif>
+              {{ $name }}
+            </a>
 
             @if(!empty($tags))
               <ul class="category">
                 @foreach($tags as $t)
                   <li>
-                    <a href="{{ $href }}" class="text-caption-1 text_white">{{ $t }}</a>
+                    <a href="{{ $href }}" class="text-caption-1 text_white" @if(Str::startsWith($href, ['http://','https://'])) target="_blank" rel="noopener" @endif>
+                      {{ $t }}
+                    </a>
                   </li>
                 @endforeach
               </ul>

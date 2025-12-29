@@ -3,55 +3,83 @@
   'viewText' => 'View SERVICES',
   'viewHref' => '#contact',
 
-  // format item:
-  // [
-  //   'title' => 'Front-End Development',
-  //   'tags'  => ['Web Application','Mobile apps','Database','Plug-in'],
-  //   'img'   => 'images/section/service-1.jpg'  // bisa URL atau path lokal
-  //   'href'  => '#', // optional
-  // ]
+  // bisa dikirim dari controller: Service::...->get()
+  // atau array manual
   'services' => null,
 ])
 
 @php
   use Illuminate\Support\Str;
 
-  // helper untuk gambar: support URL, assets lokal, atau path bawaan template "images/..."
+  // helper gambar: support URL, assets lokal, atau path bawaan template "images/..."
   $imgSrc = function($v){
     if (empty($v)) return '';
     if (Str::startsWith($v, ['http://','https://'])) return $v;
-
     if (Str::startsWith($v, 'images/')) return asset('assets/template/' . $v);
-
     return asset($v);
   };
 
-  $items = $services ?? [
-    [
-      'title' => 'Front-End Development',
-      'tags'  => ['Web Application', 'Mobile apps', 'Database', 'Plug-in'],
-      'img'   => 'images/section/service-1.jpg',
-      'href'  => $viewHref,
-    ],
-    [
-      'title' => 'Web App Development',
-      'tags'  => ['Web Application', 'Mobile apps', 'Database', 'Plug-in'],
-      'img'   => 'images/section/service-2.jpg',
-      'href'  => $viewHref,
-    ],
-    [
-      'title' => 'CMS & Website Builders',
-      'tags'  => ['Web Application', 'Mobile apps', 'Database', 'Plug-in'],
-      'img'   => 'images/section/service-3.jpg',
-      'href'  => $viewHref,
-    ],
-    [
-      'title' => 'Graphic Design',
-      'tags'  => ['Branding', 'Social Media', 'Poster', 'Visual Identity'],
-      'img'   => 'images/section/service-3.jpg',
-      'href'  => $viewHref,
-    ],
-  ];
+  // normalize tags: bisa array, json string, atau string biasa
+  $normalizeTags = function ($v) {
+    if (empty($v)) return [];
+    if (is_array($v)) return $v;
+
+    // kalau json string ["a","b"]
+    if (is_string($v)) {
+      $trim = trim($v);
+      if (Str::startsWith($trim, '[')) {
+        $decoded = json_decode($trim, true);
+        if (is_array($decoded)) return $decoded;
+      }
+
+      // fallback "a, b, c"
+      return array_values(array_filter(array_map('trim', explode(',', $v))));
+    }
+
+    // kalau Collection
+    if ($v instanceof \Illuminate\Support\Collection) {
+      return $v->values()->all();
+    }
+
+    return [];
+  };
+
+  // normalize items: bisa Collection dari Eloquent
+  $items = $services;
+
+  if ($items instanceof \Illuminate\Support\Collection) {
+    $items = $items->toArray();
+  }
+
+  // fallback default kalau belum ada data dari DB
+  if (empty($items)) {
+    $items = [
+      [
+        'title' => 'Front-End Development',
+        'tags'  => ['Web Application', 'Mobile apps', 'Database', 'Plug-in'],
+        'img'   => 'images/section/service-1.jpg',
+        'href'  => $viewHref,
+      ],
+      [
+        'title' => 'Web App Development',
+        'tags'  => ['Web Application', 'Mobile apps', 'Database', 'Plug-in'],
+        'img'   => 'images/section/service-2.jpg',
+        'href'  => $viewHref,
+      ],
+      [
+        'title' => 'CMS & Website Builders',
+        'tags'  => ['Web Application', 'Mobile apps', 'Database', 'Plug-in'],
+        'img'   => 'images/section/service-3.jpg',
+        'href'  => $viewHref,
+      ],
+      [
+        'title' => 'Graphic Design',
+        'tags'  => ['Branding', 'Social Media', 'Poster', 'Visual Identity'],
+        'img'   => 'images/section/service-3.jpg',
+        'href'  => $viewHref,
+      ],
+    ];
+  }
 @endphp
 
 <div id="service" class="section-services section" aria-label="Our Services">
@@ -68,10 +96,18 @@
       @foreach($items as $i => $s)
         @php
           $num = str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT);
-          $href = $s['href'] ?? $viewHref;
+
+          // support 2 format:
+          // template: img/href
+          // db: image_url/link_url
+          $href = $s['href'] ?? $s['link_url'] ?? $viewHref;
           $titleText = $s['title'] ?? 'Service';
-          $tags = $s['tags'] ?? [];
-          $img = $imgSrc($s['img'] ?? '');
+
+          $tagsRaw = $s['tags'] ?? [];
+          $tags = $normalizeTags($tagsRaw);
+
+          $imgRaw = $s['img'] ?? $s['image_url'] ?? '';
+          $img = $imgSrc($imgRaw);
         @endphp
 
         <div class="service-item wow animate__animated animate__fadeInUp"
@@ -108,7 +144,17 @@
                   src="{{ $img }}"
                   width="448"
                   height="490"
-                  alt="service"
+                  alt="{{ $titleText }}"
+                  loading="lazy"
+                  decoding="async"
+                >
+              @else
+                {{-- fallback image kalau image_url kosong --}}
+                <img
+                  src="{{ asset('assets/template/images/section/service-1.jpg') }}"
+                  width="448"
+                  height="490"
+                  alt="{{ $titleText }}"
                   loading="lazy"
                   decoding="async"
                 >
