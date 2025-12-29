@@ -119,6 +119,11 @@ class OrderResource extends Resource
                         'consultation' => 'info',
                         default => 'gray',
                     })
+                    ->icon(fn (string $state): ?string => match ($state) {
+                        'order' => 'heroicon-m-shopping-cart',
+                        'consultation' => 'heroicon-m-chat-bubble-left-right',
+                        default => null,
+                    })
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('name')
@@ -147,6 +152,13 @@ class OrderResource extends Resource
                         'done'        => 'success',
                         'cancelled'   => 'danger',
                         default       => 'gray',
+                    })
+                    ->icon(fn ($state): ?string => match ($state) {
+                        'new' => 'heroicon-m-sparkles',
+                        'in_progress' => 'heroicon-m-arrow-path',
+                        'done' => 'heroicon-m-check-badge',
+                        'cancelled' => 'heroicon-m-x-circle',
+                        default => null,
                     }),
 
                 Tables\Columns\TextColumn::make('whatsapp')
