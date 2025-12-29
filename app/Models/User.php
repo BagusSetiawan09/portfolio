@@ -49,14 +49,6 @@ class User extends Authenticatable
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // hanya izinkan akses ke panel id "admin"
-        if ($panel->getId() !== 'admin') {
-            return false;
-        }
-
-        // whitelist email admin
-        return in_array($this->email, [
-            'bagussetiawan.lz24@gmail.com',
-        ], true);
+        return $this->email === 'bagussetiawan.lz24@gmail.com';
     }
 }
