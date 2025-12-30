@@ -9,6 +9,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\TextEntry;
 
 class OrderResource extends Resource
 {
@@ -280,7 +284,50 @@ class OrderResource extends Resource
         return [
             'index'  => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
+            'view' => Pages\ViewOrder::route('/{record}'),
             'edit'   => Pages\EditOrder::route('/{record}/edit'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Informasi Klien')
+                    ->schema([
+                        Grid::make(3)
+                        ->schema([
+                            TextEntry::make('name')->label('Nama Klien'),
+                            TextEntry::make('email')->label('Email'),
+                            TextEntry::make('whatsapp')->label('WhatsApp'),
+                        ]),
+                    ]),
+                
+                Section::make('Detail Order')
+                    ->schema([
+                        Grid::make(2)
+                        ->schema([
+                            TextEntry::make('service')->label('Layanan')
+                                ->badge()
+                                ->color('primary'),
+                            TextEntry::make('budget_range')->label('Budget'),
+                            TextEntry::make('created_at')
+                                ->label('Tanggal Masuk')
+                                ->dateTime('d M Y, H:i'),
+                            TextEntry::make('ip_address')->label('IP Address'),
+                            
+                            // Tampilkan Peta Lokasi
+                            TextEntry::make('country')->label('Negara'),
+                            TextEntry::make('city')->label('Kota'),
+                        ]),
+                    ]),
+
+                Section::make('Pesan / Brief')
+                    ->schema([
+                        TextEntry::make('message')
+                            ->columnSpanFull()
+                            ->markdown(),
+                    ])
+            ]);
     }
 }

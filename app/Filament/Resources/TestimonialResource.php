@@ -10,6 +10,18 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\Group;
+use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+
 class TestimonialResource extends Resource
 {
     protected static ?string $model = Testimonial::class;
@@ -31,11 +43,11 @@ class TestimonialResource extends Resource
 
                     Forms\Components\Select::make('rating')
                         ->options([
-                            5 => '5',
-                            4 => '4',
-                            3 => '3',
-                            2 => '2',
-                            1 => '1',
+                            5 => '5 - Excellent',
+                            4 => '4 - Good',
+                            3 => '3 - Average',
+                            2 => '2 - Poor',
+                            1 => '1 - Terrible',
                         ])
                         ->default(5)
                         ->required()
@@ -84,11 +96,13 @@ class TestimonialResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('role')
                     ->toggleable()
-                    ->limit(25),
+                    ->limit(25)
+                    ->color('gray'),
 
                 Tables\Columns\TextColumn::make('rating')
                     ->sortable()
@@ -100,7 +114,8 @@ class TestimonialResource extends Resource
                         2 => 'danger',
                         1 => 'danger',
                         default => 'gray',
-                    }),
+                    })
+                    ->formatStateUsing(fn ($state) => $state . ' ★'),
 
                 Tables\Columns\IconColumn::make('is_published')
                     ->boolean()
@@ -108,6 +123,7 @@ class TestimonialResource extends Resource
 
                 Tables\Columns\TextColumn::make('sort_order')
                     ->sortable()
+                    ->alignCenter()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('avatar_url')
@@ -130,7 +146,6 @@ class TestimonialResource extends Resource
                     ->falseLabel('Draft'),
             ])
             ->actions([
-                // --- ACTION GROUP ---
                 Tables\Actions\ActionGroup::make([
                     
                     // 1. Detail (SlideOver)
@@ -157,6 +172,72 @@ class TestimonialResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+
+    // --- INFOLIST (TAMPILAN DETAIL POP-UP) ---
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                // Header: Nama & Role
+                Section::make()
+                    ->schema([
+                        Split::make([
+                            Grid::make(1)->schema([
+                                TextEntry::make('name')
+                                    ->label('Client Name')
+                                    ->size(TextEntrySize::Large)
+                                    ->weight(FontWeight::Bold),
+                                
+                                TextEntry::make('role')
+                                    ->icon('heroicon-m-briefcase')
+                                    ->color('gray'),
+                            ]),
+
+                            Group::make([
+                                TextEntry::make('rating')
+                                    ->badge()
+                                    ->color(fn ($state) => match ((int) $state) {
+                                        5 => 'success',
+                                        4, 3 => 'warning',
+                                        default => 'danger',
+                                    })
+                                    ->formatStateUsing(fn ($state) => str_repeat('★', $state) . " ($state/5)"),
+                                
+                                IconEntry::make('is_published')
+                                    ->label('Active')
+                                    ->boolean(),
+                            ])->grow(false),
+                        ])->from('md'),
+                    ]),
+
+                // Content Split
+                Split::make([
+                    // KIRI: Pesan Testimonial
+                    Section::make('Ulasan')
+                        ->schema([
+                            TextEntry::make('title')
+                                ->label('Judul Ulasan')
+                                ->weight('bold')
+                                ->visible(fn ($record) => !empty($record->title)),
+
+                            TextEntry::make('text')
+                                ->hiddenLabel()
+                                ->markdown()
+                                ->prose(),
+                        ])->grow(),
+
+                    // KANAN: Avatar
+                    Section::make('Avatar')
+                        ->schema([
+                            ImageEntry::make('avatar_url')
+                                ->hiddenLabel()
+                                ->circular() // Biar bulat seperti foto profil
+                                ->height(150)
+                                ->defaultImageUrl('https://ui-avatars.com/api/?name=User'), // Fallback jika kosong
+                        ])->grow(false),
+                ])->from('md')->columnSpanFull(),
             ]);
     }
 

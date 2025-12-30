@@ -10,6 +10,18 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\Group;
+use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
@@ -42,7 +54,8 @@ class ServiceResource extends Resource
                         ->label('Image URL')
                         ->url()
                         ->maxLength(500)
-                        ->columnSpan(6),
+                        ->columnSpan(6)
+                        ->helperText('URL Gambar Service'),
 
                     Forms\Components\TextInput::make('link_url')
                         ->label('Link URL')
@@ -51,9 +64,11 @@ class ServiceResource extends Resource
                         ->columnSpan(6),
 
                     Forms\Components\TagsInput::make('tags')
-                        ->columnSpan(12),
+                        ->columnSpan(12)
+                        ->helperText('Contoh: Web Design, UI/UX, Maintenance'),
 
                     Forms\Components\Textarea::make('excerpt')
+                        ->label('Short Description')
                         ->rows(3)
                         ->columnSpan(12),
                 ]),
@@ -71,6 +86,7 @@ class ServiceResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
+                    ->weight('bold')
                     ->wrap(),
 
                 Tables\Columns\IconColumn::make('is_published')
@@ -79,6 +95,7 @@ class ServiceResource extends Resource
 
                 Tables\Columns\TextColumn::make('sort_order')
                     ->sortable()
+                    ->alignCenter()
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('image_url')
@@ -101,7 +118,6 @@ class ServiceResource extends Resource
                     ->falseLabel('Draft'),
             ])
             ->actions([
-                // --- ACTION GROUP ---
                 Tables\Actions\ActionGroup::make([
                     
                     // 1. Detail (SlideOver)
@@ -128,6 +144,70 @@ class ServiceResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+
+    // --- INFOLIST (TAMPILAN DETAIL POP-UP) ---
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                // Header
+                Section::make()
+                    ->schema([
+                        Split::make([
+                            Grid::make(1)->schema([
+                                TextEntry::make('title')
+                                    ->label('Nama Service')
+                                    ->size(TextEntrySize::Large)
+                                    ->weight(FontWeight::Bold),
+                            ]),
+                            Group::make([
+                                IconEntry::make('is_published')
+                                    ->label('Active')
+                                    ->boolean(),
+                            ])->grow(false),
+                        ])->from('md')
+                    ]),
+
+                // Content Split
+                Split::make([
+                    // KIRI: Detail Info
+                    Section::make('Informasi')
+                        ->schema([
+                            TextEntry::make('link_url')
+                                ->label('Service Link')
+                                ->url(fn ($record) => $record->link_url)
+                                ->openUrlInNewTab()
+                                ->color('primary')
+                                ->icon('heroicon-m-arrow-top-right-on-square')
+                                ->visible(fn ($record) => !empty($record->link_url)),
+
+                            TextEntry::make('sort_order')
+                                ->label('Urutan Tampil'),
+
+                            TextEntry::make('tags')
+                                ->badge()
+                                ->separator(',')
+                                ->color('success'),
+
+                            TextEntry::make('excerpt')
+                                ->label('Deskripsi')
+                                ->markdown()
+                                ->prose(),
+                        ])->grow(),
+
+                    // KANAN: Gambar Preview
+                    Section::make('Preview')
+                        ->schema([
+                            ImageEntry::make('image_url')
+                                ->hiddenLabel()
+                                ->height(200)
+                                ->extraImgAttributes([
+                                    'class' => 'rounded-xl shadow-lg object-cover w-full',
+                                ]),
+                        ])->grow(false), // Lebar menyesuaikan gambar
+                ])->from('md')->columnSpanFull(),
             ]);
     }
 

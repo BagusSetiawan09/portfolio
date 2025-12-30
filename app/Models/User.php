@@ -16,7 +16,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
-        'is_admin', // ✅ penting
+        'is_admin', // penting
     ];
 
     protected $hidden = [
@@ -27,12 +27,12 @@ class User extends Authenticatable implements FilamentUser
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'is_admin' => 'boolean', // ✅ penting
+        'is_admin' => 'boolean', // penting
     ];
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // ✅ aman untuk production
+        // aman untuk production
         // return (bool) $this->is_admin;
 
         $superAdminEmail = env('FILAMENT_SUPER_ADMIN_EMAIL');

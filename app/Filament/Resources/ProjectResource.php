@@ -11,6 +11,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
+// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\Group;
+use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+
 class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
@@ -23,9 +35,10 @@ class ProjectResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['title', 'tags']; // Bisa cari berdasarkan tags juga
+        return ['title', 'tags'];
     }
 
+    // --- FORM (INPUT DATA) ---
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -98,6 +111,7 @@ class ProjectResource extends Resource
         ]);
     }
 
+    // --- TABLE (LIST DATA) ---
     public static function table(Table $table): Table
     {
         return $table
@@ -149,25 +163,19 @@ class ProjectResource extends Resource
                     ->falseLabel('Draft'),
             ])
             ->actions([
-                // --- ACTION GROUP ---
                 Tables\Actions\ActionGroup::make([
-                    
-                    // 1. Detail (SlideOver)
                     Tables\Actions\ViewAction::make()
                         ->label('Detail')
                         ->color('info')
                         ->icon('heroicon-m-eye')
                         ->slideOver(),
 
-                    // 2. Edit
                     Tables\Actions\EditAction::make()
                         ->color('warning')
                         ->icon('heroicon-m-pencil-square'),
 
-                    // 3. Delete
                     Tables\Actions\DeleteAction::make()
                         ->icon('heroicon-m-trash'),
-
                 ])
                 ->label('Actions')
                 ->icon('heroicon-m-ellipsis-vertical')
@@ -179,11 +187,103 @@ class ProjectResource extends Resource
             ]);
     }
 
+    // --- INFOLIST (TAMPILAN DETAIL POP-UP/PAGE) ---
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                // BAGIAN 1: HEADER UTAMA
+                Section::make()
+                    ->schema([
+                        Split::make([
+                            // KIRI: Judul
+                            Grid::make(1)->schema([
+                                TextEntry::make('title')
+                                    ->label('Nama Project')
+                                    ->size(TextEntrySize::Large)
+                                    ->weight(FontWeight::Bold),
+                                
+                                TextEntry::make('slug')
+                                    ->icon('heroicon-m-link')
+                                    ->color('gray')
+                                    ->copyable(),
+                            ]),
+
+                            // KANAN: Status Badges
+                            Group::make([
+                                TextEntry::make('created_at')
+                                    ->dateTime('d M Y')
+                                    ->alignRight(),
+                                    
+                                Grid::make(3)->schema([
+                                    IconEntry::make('is_published')
+                                        ->label('Published')
+                                        ->boolean(),
+                                    IconEntry::make('show_in_latest')
+                                        ->label('Latest')
+                                        ->boolean(),
+                                    IconEntry::make('show_in_portfolio')
+                                        ->label('Portfolio')
+                                        ->boolean(),
+                                ]),
+                            ])->grow(false), // Agar tidak terlalu lebar
+                        ])->from('md'),
+                    ]),
+
+                // BAGIAN 2: SPLIT CONTENT (KIRI TEKS, KANAN GAMBAR)
+                Split::make([
+                    // KIRI: Detail Project
+                    Section::make('Informasi Detail')
+                        ->schema([
+                            TextEntry::make('year')
+                                ->label('Tahun')
+                                ->badge()
+                                ->color('info'),
+
+                            TextEntry::make('link_url')
+                                ->label('Visit Website')
+                                ->url(fn ($record) => $record->link_url)
+                                ->openUrlInNewTab()
+                                ->color('primary')
+                                ->icon('heroicon-m-arrow-top-right-on-square')
+                                ->visible(fn ($record) => !empty($record->link_url)),
+
+                            TextEntry::make('sort_order')
+                                ->label('Urutan'),
+
+                            TextEntry::make('tags')
+                                ->label('Teknologi / Tags')
+                                ->badge()
+                                ->separator(',')
+                                ->color('warning'),
+                                
+                            TextEntry::make('excerpt')
+                                ->label('Deskripsi Singkat')
+                                ->markdown()
+                                ->columnSpanFull(),
+                        ])->grow(), // Mengambil ruang sisa
+
+                    // KANAN: Gambar Preview
+                    Section::make('Preview')
+                        ->schema([
+                            ImageEntry::make('image_url')
+                                ->hiddenLabel()
+                                ->height(250)
+                                ->extraImgAttributes([
+                                    'class' => 'rounded-xl shadow-lg object-cover w-full',
+                                    'style' => 'object-position: center top;',
+                                ]),
+                        ])->grow(false), // Ukuran pas sesuai gambar
+                ])->from('md')->columnSpanFull(),
+            ]);
+    }
+
     public static function getPages(): array
     {
         return [
             'index'  => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
+            // 'view' => Pages\ViewProject::route('/{record}'), // Aktifkan jika mau halaman terpisah, tapi slideOver sudah cukup
             'edit'   => Pages\EditProject::route('/{record}/edit'),
         ];
     }

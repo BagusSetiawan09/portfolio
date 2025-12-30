@@ -12,6 +12,16 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
+// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\Group;
+use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+
 class ContractResource extends Resource
 {
     protected static ?string $model = Contract::class;
@@ -35,6 +45,7 @@ class ContractResource extends Resource
         ];
     }
 
+    // --- FORM EDITOR ---
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -145,6 +156,7 @@ class ContractResource extends Resource
         ]);
     }
 
+    // --- TABLE LIST ---
     public static function table(Table $table): Table
     {
         return $table
@@ -162,7 +174,8 @@ class ContractResource extends Resource
                     ->label('Number')
                     ->searchable()
                     ->sortable()
-                    ->copyable(),
+                    ->copyable()
+                    ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('client_name')
                     ->label('Client')
@@ -194,7 +207,6 @@ class ContractResource extends Resource
                     ->sortable(),
             ])
             ->actions([
-                // --- ACTION GROUP ---
                 Tables\Actions\ActionGroup::make([
                     
                     // 1. Detail
@@ -221,6 +233,121 @@ class ContractResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+
+    // --- INFOLIST (TAMPILAN DETAIL DOKUMEN) ---
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                // Header: Nomor Kontrak & Status
+                Section::make()
+                    ->schema([
+                        Split::make([
+                            Grid::make(1)->schema([
+                                TextEntry::make('number')
+                                    ->label('Contract Number')
+                                    ->size(TextEntrySize::Large)
+                                    ->weight(FontWeight::Bold)
+                                    ->copyable(),
+                                TextEntry::make('project_title')
+                                    ->label('Project Title')
+                                    ->color('gray'),
+                            ]),
+
+                            Group::make([
+                                TextEntry::make('status')
+                                    ->badge()
+                                    ->color(fn (string $state) => match ($state) {
+                                        'draft' => 'gray',
+                                        'sent' => 'info',
+                                        'signed' => 'success',
+                                        'cancelled' => 'danger',
+                                        default => 'gray',
+                                    }),
+                                TextEntry::make('signed_at')
+                                    ->label('Signed Date')
+                                    ->dateTime('d M Y')
+                                    ->placeholder('Not Signed Yet'),
+                            ])->grow(false),
+                        ])->from('md')
+                    ]),
+
+                // Content Split
+                Split::make([
+                    // KIRI: Detail Utama
+                    Group::make([
+                        Section::make('Client Information')
+                            ->schema([
+                                Grid::make(2)->schema([
+                                    TextEntry::make('client_name')
+                                        ->label('Name')
+                                        ->weight('bold'),
+                                    TextEntry::make('client_email')
+                                        ->label('Email')
+                                        ->icon('heroicon-m-envelope')
+                                        ->copyable(),
+                                    TextEntry::make('client_whatsapp')
+                                        ->label('WhatsApp')
+                                        ->icon('heroicon-m-phone'),
+                                ]),
+                            ]),
+                        
+                        Section::make('Contract Details')
+                            ->schema([
+                                TextEntry::make('scope')
+                                    ->label('Scope of Work')
+                                    ->markdown()
+                                    ->prose()
+                                    ->visible(fn ($record) => !empty($record->scope)),
+                                
+                                // === FIX PAPER MODE ===
+                                TextEntry::make('content')
+                                    ->label('Full Contract Content')
+                                    ->columnSpanFull()
+                                    ->html()
+                                    ->formatStateUsing(fn ($state) => <<<HTML
+                                        <div class="bg-white text-black p-6 md:p-10 rounded-lg shadow-md border border-gray-300">
+                                            <div class="prose max-w-none text-black">
+                                                {$state}
+                                            </div>
+                                        </div>
+                                    HTML),
+                                // ======================
+                                    
+                                TextEntry::make('payment_terms')
+                                    ->label('Payment Terms')
+                                    ->markdown(),
+                                    
+                                TextEntry::make('notes')
+                                    ->label('Internal Notes')
+                                    ->markdown()
+                                    ->color('gray'),
+                            ]),
+                    ]),
+
+                    // KANAN: Metadata Sidebar
+                    Group::make([
+                        Section::make('Overview')
+                            ->schema([
+                                TextEntry::make('price')
+                                    ->label('Contract Value')
+                                    ->weight('bold')
+                                    ->size(TextEntrySize::Medium),
+                                
+                                TextEntry::make('start_date')
+                                    ->date('d M Y'),
+                                TextEntry::make('end_date')
+                                    ->date('d M Y'),
+                                
+                                // Link ke Order jika ada
+                                TextEntry::make('order_id')
+                                    ->label('Related Order ID')
+                                    ->visible(fn ($record) => !empty($record->order_id)),
+                            ]),
+                    ])->grow(false), // Sidebar lebih kecil
+                ])->from('md')->columnSpanFull(),
             ]);
     }
 
