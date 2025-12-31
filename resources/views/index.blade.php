@@ -5,7 +5,7 @@
 
   // 1. AMBIL DATA DARI DATABASE
   $site    = Site::first();
-  $profile = Profile::first();
+  $profile = Profile::first() ?? new Profile();
 
   // 2. SIAPKAN VARIABEL
   $brandName = $site->site_name ?? ($profile->name ?? 'Bagus Setiawan');
@@ -46,7 +46,7 @@
   {{-- NAVBAR --}}
   <x-sections.navbar
     :brand="$brandName"
-    :available-text="$profile->is_available ? 'Available for work' : 'Busy'"
+    :available-text="($profile?->is_available) ? 'Available for work' : 'Busy'"
     :email="$contactEmail"
     :phone="$contactPhone"
     :links="$navLinks"
