@@ -11,7 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
-// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+// --- IMPORT INFOLIST COMPONENTS ---
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Grid;
@@ -116,7 +116,7 @@ class ProjectResource extends Resource
     {
         return $table
             ->recordUrl(null)
-            ->recordAction(Tables\Actions\ViewAction::class)
+            ->recordAction('view')
 
             ->defaultSort('sort_order', 'asc')
             ->columns([
@@ -177,10 +177,9 @@ class ProjectResource extends Resource
                     Tables\Actions\DeleteAction::make()
                         ->icon('heroicon-m-trash'),
                 ])
+                ->button()
                 ->label('Actions')
-                ->icon('heroicon-m-ellipsis-vertical')
-                ->color('dark')
-                ->button(),
+                ->color('gray')
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -192,12 +191,12 @@ class ProjectResource extends Resource
     {
         return $infolist
             ->schema([
-                // BAGIAN 1: HEADER UTAMA
+                // BAGIAN 1: HEADER UTAMA (LAYOUT DIPERBAIKI)
                 Section::make()
                     ->schema([
                         Split::make([
-                            // KIRI: Judul
-                            Grid::make(1)->schema([
+                            // KIRI: Judul & Metadata Dasar
+                            Group::make([
                                 TextEntry::make('title')
                                     ->label('Nama Project')
                                     ->size(TextEntrySize::Large)
@@ -207,26 +206,38 @@ class ProjectResource extends Resource
                                     ->icon('heroicon-m-link')
                                     ->color('gray')
                                     ->copyable(),
+
+                                // -- PINDAHKAN TANGGAL KESINI SUPAYA RAPI DI BAWAH JUDUL --
+                                TextEntry::make('created_at')
+                                    ->label('Dibuat pada')
+                                    ->dateTime('d M Y')
+                                    ->icon('heroicon-m-calendar')
+                                    ->color('gray'),
                             ]),
 
-                            // KANAN: Status Badges
-                            Group::make([
-                                TextEntry::make('created_at')
-                                    ->dateTime('d M Y')
-                                    ->alignRight(),
-                                    
-                                Grid::make(3)->schema([
-                                    IconEntry::make('is_published')
-                                        ->label('Published')
-                                        ->boolean(),
-                                    IconEntry::make('show_in_latest')
-                                        ->label('Latest')
-                                        ->boolean(),
-                                    IconEntry::make('show_in_portfolio')
-                                        ->label('Portfolio')
-                                        ->boolean(),
-                                ]),
-                            ])->grow(false), // Agar tidak terlalu lebar
+                            // KANAN: Status Badges (Dibuat Vertical Group supaya rapi)
+                            Section::make('Status Penayangan')
+                                ->schema([
+                                    Grid::make(2)->schema([ // Grid 2 Kolom untuk status
+                                        TextEntry::make('is_published')
+                                            ->label('Status')
+                                            ->badge()
+                                            ->formatStateUsing(fn (bool $state) => $state ? 'Published' : 'Draft')
+                                            ->color(fn (bool $state) => $state ? 'success' : 'gray'),
+                                        
+                                        TextEntry::make('show_in_latest')
+                                            ->label('Latest Project')
+                                            ->badge()
+                                            ->formatStateUsing(fn (bool $state) => $state ? 'Yes' : 'No')
+                                            ->color(fn (bool $state) => $state ? 'info' : 'gray'),
+
+                                        TextEntry::make('show_in_portfolio')
+                                            ->label('Portfolio Page')
+                                            ->badge()
+                                            ->formatStateUsing(fn (bool $state) => $state ? 'Yes' : 'No')
+                                            ->color(fn (bool $state) => $state ? 'info' : 'gray'),
+                                    ]),
+                                ])->grow(false), 
                         ])->from('md'),
                     ]),
 
@@ -283,7 +294,6 @@ class ProjectResource extends Resource
         return [
             'index'  => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
-            // 'view' => Pages\ViewProject::route('/{record}'), // Aktifkan jika mau halaman terpisah, tapi slideOver sudah cukup
             'edit'   => Pages\EditProject::route('/{record}/edit'),
         ];
     }

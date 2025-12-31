@@ -124,7 +124,7 @@ class OrderResource extends Resource
     {
         return $table
             ->recordUrl(null) 
-            ->recordAction(Tables\Actions\ViewAction::class)
+            ->recordAction('view') // Klik baris langsung View Modal
 
             ->defaultSort('created_at', 'desc')
             ->columns([
@@ -240,7 +240,6 @@ class OrderResource extends Resource
                     Tables\Actions\ViewAction::make()
                         ->label('Detail')
                         ->color('info')
-                        ->icon('heroicon-m-eye')
                         ->slideOver(),
                     
                     // 2. Custom Action: In Progress
@@ -261,18 +260,15 @@ class OrderResource extends Resource
 
                     // 4. Edit
                     Tables\Actions\EditAction::make()
-                        ->color('warning')
-                        ->icon('heroicon-m-pencil-square'),
+                        ->color('warning'),
 
                     // 5. Delete
-                    Tables\Actions\DeleteAction::make()
-                        ->icon('heroicon-m-trash'),
+                    Tables\Actions\DeleteAction::make(),
 
                 ])
+                ->button()        // <--- Ubah jadi Button Kotak
                 ->label('Actions')
-                ->icon('heroicon-m-ellipsis-vertical')
-                ->color('dark')
-                ->button(),
+                ->color('gray')   // <--- Warna Putih/Netral
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -284,7 +280,7 @@ class OrderResource extends Resource
         return [
             'index'  => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
-            'view' => Pages\ViewOrder::route('/{record}'),
+            'view'   => Pages\ViewOrder::route('/{record}'),
             'edit'   => Pages\EditOrder::route('/{record}/edit'),
         ];
     }

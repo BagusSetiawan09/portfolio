@@ -9,12 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // pilihan: order atau consultation
+            // tipe order, default 'order'
             if (!Schema::hasColumn('orders', 'type')) {
                 $table->string('type')->default('order')->after('id');
             }
 
-            // kalau mau beda dari phone, simpan whatsapp terpisah
+            // nomor whatsapp
             if (!Schema::hasColumn('orders', 'whatsapp')) {
                 $table->string('whatsapp')->nullable()->after('phone');
             }

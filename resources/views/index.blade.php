@@ -1,19 +1,35 @@
 @php
-  $brand = $brand ?? 'Bagus Setiawan';
+  use App\Models\Site;
+  use App\Models\Profile;
+  use Illuminate\Support\Str;
 
-  $contact = $contact ?? [
-    'email' => 'hello@bagussetiawan.com',
-    'phone' => '(+62) 895-6288-94070',
-  ];
+  // 1. AMBIL DATA DARI DATABASE
+  $site    = Site::first();
+  $profile = Profile::first();
 
-  $hero = $hero ?? [
-    'role' => 'Frontend Developer',
-    'location' => 'Based in Indonesia',
-    'first_name' => 'Bagus',
-    'last_name' => 'Setiawan',
-    'image' => 'images/hero/hero-img.png',
-  ];
+  // 2. SIAPKAN VARIABEL
+  $brandName = $site->site_name ?? ($profile->name ?? 'Bagus Setiawan');
+  
+  // Pecah Nama untuk Hero
+  $fullName  = $profile->name ?? 'Bagus Setiawan';
+  $parts     = explode(' ', $fullName);
+  $firstName = $parts[0];
+  $lastName  = isset($parts[1]) ? implode(' ', array_slice($parts, 1)) : '';
 
+  // Data Contact
+  $contactEmail = $profile->email ?? 'hello@example.com';
+  $contactPhone = $profile->whatsapp ?? '+62 812 3456 7890';
+
+  // Data Hero (Teks tetap dinamis dari DB)
+  $heroRole   = $profile->role ?? 'Frontend Developer';
+  $heroDesc   = $profile->hero_description ?? 'Welcome to my portfolio website!';
+  
+  // --- PERBAIKAN: FOTO HERO DI-HARDCODE (AGAR TIDAK BERUBAH) ---
+  // Saya kembalikan ke path original Anda, abaikan data dari DB.
+  $heroImage  = 'images/hero/hero-img.png'; 
+  // -----------------------------------------------------------
+
+  // Nav Links
   $navLinks = $navLinks ?? [
     ['label' => 'About us',        'href' => '#about'],
     ['label' => 'Our Services',    'href' => '#service'],
@@ -24,52 +40,52 @@
 @endphp
 
 <x-layouts.app
-  :title="'Portfolio — ' . $brand"
-  description="Welcome to my portfolio website! I'm Bagus Setiawan, a passionate Frontend Developer based in Indonesia. Explore my projects and get in touch for collaborations."
+  :title="' ' . $brandName"
+  :description="$heroDesc"
 >
+  {{-- NAVBAR --}}
   <x-sections.navbar
-    :brand="$brand"
-    :available-text="'Available for work'"
-    :email="$contact['email']"
-    :phone="$contact['phone']"
+    :brand="$brandName"
+    :available-text="$profile->is_available ? 'Available for work' : 'Busy'"
+    :email="$contactEmail"
+    :phone="$contactPhone"
     :links="$navLinks"
   />
 
+  {{-- HERO SECTION --}}
   <x-sections.hero
-    :role="$hero['role']"
-    :location="$hero['location']"
-    :first-name="$hero['first_name']"
-    :last-name="$hero['last_name']"
-    image-url="images/hero/hero-img.png"
+    :role="$heroRole"
+    location="Based in Indonesia" 
+    :first-name="$firstName"
+    :last-name="$lastName"
+    :image-url="$heroImage" {{-- <-- Ini sekarang akan selalu memakai gambar original --}}
+    :description="$heroDesc"
   />
 
   <div class="main-content section-onepage">
     <x-sections.about
       :years="3"
-      role-line1="FRONTEND DEVELOPER"
-      role-line2="DEVELOPER BASED IN INDONESIA"
+      :role-line1="strtoupper($heroRole)"
+      role-line2="BASED IN INDONESIA"
     />
 
     <x-sections.section-about />
 
-    {{-- ambil dari DB (controller) --}}
     <x-sections.our-services :services="$services" />
 
-    {{-- latest work dari DB --}}
     <x-sections.latest-project id="latest-work" :projects="$latestProjects" />
 
     <x-sections.wrap-banner />
 
-    {{-- portfolio dari DB --}}
     <x-sections.section-portfolio id="work" :items="$portfolioProjects" />
 
     <x-sections.testimonial :items="$testimonials ?? null" />
   </div>
 
   <x-sections.footer
-    :brand="$brand"
-    :email="$contact['email']"
-    :phone="$contact['phone']"
+    :brand="$brandName"
+    :email="$contactEmail"
+    :phone="$contactPhone"
   />
 
   <x-sections.order-modal />

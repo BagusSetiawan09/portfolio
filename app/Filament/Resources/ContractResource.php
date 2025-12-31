@@ -12,7 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+// --- IMPORT INFOLIST COMPONENTS ---
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Grid;
@@ -160,9 +160,9 @@ class ContractResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordUrl(null)
-            ->recordAction(Tables\Actions\ViewAction::class)
-
+            ->recordUrl(null) // Matikan link default
+            ->recordAction('view') // Klik baris langsung View Modal
+            
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
@@ -213,26 +213,24 @@ class ContractResource extends Resource
                     Tables\Actions\ViewAction::make()
                         ->label('Detail')
                         ->color('info')
-                        ->icon('heroicon-m-eye')
-                        ->slideOver(),
+                        ->slideOver(), // Slide dari kanan agar lebih lega bacanya
 
                     // 2. Edit
                     Tables\Actions\EditAction::make()
-                        ->color('warning')
-                        ->icon('heroicon-m-pencil-square'),
+                        ->color('warning'),
 
                     // 3. Delete
-                    Tables\Actions\DeleteAction::make()
-                        ->icon('heroicon-m-trash'),
+                    Tables\Actions\DeleteAction::make(),
 
                 ])
+                ->button()        // <--- Ubah jadi Button Kotak
                 ->label('Actions')
-                ->icon('heroicon-m-ellipsis-vertical')
-                ->color('dark')
-                ->button()
+                ->color('gray')   // <--- Warna Gray (Putih Netral)
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -302,7 +300,7 @@ class ContractResource extends Resource
                                     ->prose()
                                     ->visible(fn ($record) => !empty($record->scope)),
                                 
-                                // === FIX PAPER MODE ===
+                                // === PAPER MODE DISPLAY ===
                                 TextEntry::make('content')
                                     ->label('Full Contract Content')
                                     ->columnSpanFull()

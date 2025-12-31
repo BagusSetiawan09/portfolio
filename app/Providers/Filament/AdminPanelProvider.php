@@ -20,6 +20,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Support\HtmlString;
+use Filament\Navigation\MenuItem;
+use App\Filament\Pages\ManageProfile;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -33,6 +35,20 @@ class AdminPanelProvider extends PanelProvider
             
             ->colors([
                 'primary' => '#b7ff00',
+            ])
+
+            ->userMenuItems([ 
+                MenuItem::make()
+                    ->label('Edit Profile')
+                    ->url(fn (): string => ManageProfile::getUrl())
+                    ->icon('heroicon-o-user-circle'),
+            ])
+
+            ->navigationGroups([
+                'Orders',
+                'Content',
+                'Documents',
+                'Settings',
             ])
 
             ->databaseNotifications()

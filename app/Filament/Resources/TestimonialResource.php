@@ -10,7 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-// --- IMPORT INFOLIST COMPONENTS (WAJIB ADA) ---
+// --- IMPORT INFOLIST COMPONENTS ---
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Grid;
@@ -90,7 +90,7 @@ class TestimonialResource extends Resource
     {
         return $table
             ->recordUrl(null)
-            ->recordAction(Tables\Actions\ViewAction::class)
+            ->recordAction('view')
 
             ->defaultSort('sort_order', 'asc')
             ->columns([
@@ -165,10 +165,9 @@ class TestimonialResource extends Resource
                         ->icon('heroicon-m-trash'),
 
                 ])
+                ->button()        // <--- Ubah jadi Button Kotak
                 ->label('Actions')
-                ->icon('heroicon-m-ellipsis-vertical')
-                ->color('dark')
-                ->button(),
+                ->color('gray')   // <--- Warna Putih/Netral
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

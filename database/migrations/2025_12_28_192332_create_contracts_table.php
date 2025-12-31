@@ -14,7 +14,7 @@ return new class extends Migration
             // Nomor kontrak dibuat otomatis setelah record dibuat
             $table->string('number')->nullable()->unique();
 
-            // optional relasi (kalau mau tarik data dari order/project)
+            // relasi ke order / project (jika ada)
             $table->foreignId('order_id')->nullable()->constrained('orders')->nullOnDelete();
             $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete();
 
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('client_email')->nullable();
             $table->string('client_whatsapp')->nullable();
 
-            // project/terms ringkas (untuk metadata + bisa dipakai template)
+            // project/terms ringkas (untuk metadata)
             $table->string('project_title')->nullable();
             $table->text('scope')->nullable();
             $table->string('price')->nullable();
