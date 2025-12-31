@@ -10,7 +10,8 @@ use App\Models\Order;
 use App\Models\Project;
 use App\Observers\OrderObserver;
 use App\Observers\ProjectObserver;
-
+use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Assets\Css;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,5 +37,9 @@ class AppServiceProvider extends ServiceProvider
             View::share('profile', Profile::first());
         } catch (\Exception $e) {
         }
+
+        FilamentAsset::register([
+        Css::make('filament-custom', asset('css/filament-custom.css')),
+    ]);
     }
 }

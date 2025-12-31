@@ -1,0 +1,11 @@
+/* Hide scrollbar in sidebar but keep scroll */
+.fi-sidebar-nav, .fi-sidebar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.fi-sidebar-nav::-webkit-scrollbar,
+.fi-sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
