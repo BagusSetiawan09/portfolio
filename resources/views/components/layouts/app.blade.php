@@ -43,7 +43,10 @@
   <link rel="shortcut icon" href="{{ $finalFav }}">
   <link rel="apple-touch-icon-precomposed" href="{{ $finalFav }}">
 
+  {{-- Perf: preconnect untuk CDN/font --}}
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cal-sans@1.0.1/index.min.css">
 
   <link rel="stylesheet" href="{{ asset('assets/template/css/bootstrap.css') }}">
@@ -54,12 +57,12 @@
 
   <link rel="stylesheet" href="{{ asset('assets/template/font/fonts.css') }}">
 
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ asset('css/override.css') }}">
   <link rel="stylesheet" href="{{ asset('css/custom-cursor.css') }}">
 
-  {{-- ✅ LIVEWIRE STYLES (WAJIB, CUMA 1x) --}}
   @livewireStyles
 
   @stack('styles')
@@ -87,23 +90,23 @@
     </svg>
   </div>
 
-  <script src="{{ asset('assets/template/js/jquery.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('assets/template/js/jquery.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/bootstrap.min.js') }}" defer></script>
 
-  <script src="{{ asset('assets/template/js/gsap.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/ScrollTrigger.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/SplitText.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/gsapAnimate.js') }}"></script>
+  <script src="{{ asset('assets/template/js/gsap.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/ScrollTrigger.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/SplitText.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/gsapAnimate.js') }}" defer></script>
 
-  <script src="{{ asset('assets/template/js/wow.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/ukiyo.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/ScrollSmooth.js') }}"></script>
+  <script src="{{ asset('assets/template/js/wow.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/ukiyo.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/ScrollSmooth.js') }}" defer></script>
 
-  <script src="{{ asset('assets/template/js/swiper-bundle.min.js') }}"></script>
-  <script src="{{ asset('assets/template/js/infinityslide.js') }}"></script>
-  <script src="{{ asset('assets/template/js/carousel.js') }}"></script>
+  <script src="{{ asset('assets/template/js/swiper-bundle.min.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/infinityslide.js') }}" defer></script>
+  <script src="{{ asset('assets/template/js/carousel.js') }}" defer></script>
 
-  <script src="{{ asset('assets/template/js/main.js') }}"></script>
+  <script src="{{ asset('assets/template/js/main.js') }}" defer></script>
 
   <script src="{{ asset('js/custom-cursor.js') }}" defer></script>
 
@@ -111,8 +114,5 @@
 
   {{-- ✅ LIVEWIRE SCRIPTS (WAJIB, CUMA 1x) --}}
   @livewireScripts
-
-  <div class="cursorDot" aria-hidden="true"></div>
-  <div class="cursorRing" aria-hidden="true"></div>
 </body>
 </html>
