@@ -26,7 +26,7 @@
   
   // --- PERBAIKAN: FOTO HERO DI-HARDCODE (AGAR TIDAK BERUBAH) ---
   // Saya kembalikan ke path original Anda, abaikan data dari DB.
-  $heroImage  = 'images/hero/hero-img.png'; 
+  $heroImage  = 'images/hero/hero-img.webp'; 
   // -----------------------------------------------------------
 
   // Nav Links

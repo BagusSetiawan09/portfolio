@@ -1,5 +1,5 @@
 @props([
-  'imageUrl' => 'images/hero/hero-img.png',
+  'imageUrl' => 'images/hero/hero-img.webp',
   'imageAlt' => 'Hero image',
   'itemsTop' => null,
   'itemsBottom' => null,
