@@ -1,0 +1,89 @@
+@php
+    // Definisikan variabel settings di sini agar HTML di bawah lebih bersih
+    $logoUrl    = $settings['company_logo'] ?? null;
+    $signBase64 = $settings['company_signature'] ?? null; 
+    $compName   = $settings['company_name'] ?? 'CODEXLY';
+    $compSub    = $settings['company_subtext'] ?? 'Your Website Solution';
+    $compAddr   = $settings['company_address'] ?? 'Kota Medan, Sumatera Utara';
+    $compEmail  = $settings['company_email'] ?? 'hello@codexly.site';
+    $compPhone  = $settings['company_phone'] ?? '0895-6288-94070';
+@endphp
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Surat - {{ $letter->number }}</title>
+    <style>
+        @page { size: A4; margin: 1.5cm 2cm; }
+        body { font-family: "Times New Roman", serif; font-size: 11pt; line-height: 1.3; color: #000; margin: 0; padding: 0; }
+        
+        .header { border-bottom: 3px solid black; padding-bottom: 5px; margin-bottom: 15px; }
+        .tbl-header { width: 100%; border-collapse: collapse; }
+        .comp-name { font-size: 18pt; font-weight: bold; text-transform: uppercase; margin: 0; }
+        
+        .meta-table { width: 100%; margin-bottom: 10px; }
+        
+        /* WRAPPER KONTEN UNTUK MENGUNCI POSISI */
+        .main-content-wrapper { position: relative; }
+        .content-box { text-align: justify; margin: 0; padding: 0; }
+        .content-box p { margin: 0 0 5px 0; padding: 0; }
+        .content-box p:last-child { margin-bottom: 0 !important; }
+        
+        /* AREA PENUTUP YANG DIRAPATKAN */
+        .closing-area { 
+            width: 250px; 
+            margin-top: 15px; /* Jarak aman dari baris terakhir teks */
+            page-break-inside: avoid; 
+        }
+        .sign-img { display: block; max-height: 75px; width: auto; margin: 2px 0; }
+        .sign-name { font-weight: bold; text-decoration: underline; margin: 0; display: block; }
+    </style>
+</head>
+<body onload="setTimeout(function(){ window.print(); }, 1000)">
+    
+    <div class="header">
+        <table class="tbl-header">
+            <tr>
+                <td style="width: 65%;">
+                    @if($logoUrl)
+                        <img src="{{ $logoUrl }}" style="height: 60px; float: left; margin-right: 15px;">
+                    @endif
+                    <div style="display: inline-block;">
+                        <div class="comp-name">{{ $compName }}</div>
+                        <div style="font-size: 9pt; font-style: italic;">{{ $compSub }}</div>
+                    </div>
+                </td>
+                <td style="text-align: right; font-size: 8pt; width: 35%;">
+                    <strong>{{ $compPhone }}</strong><br>{{ $compEmail }}<br>{{ $compAddr }}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="meta-table">
+        <tr>
+            <td width="60%">Nomor : <strong>{{ $letter->number }}</strong></td>
+            <td width="40%" style="text-align: right;">Medan, {{ \Carbon\Carbon::parse($letter->letter_date)->locale('id')->isoFormat('D MMMM Y') }}</td>
+        </tr>
+        <tr><td colspan="2">Perihal : {{ $letter->subject }}</td></tr>
+    </table>
+
+    <div class="main-content-wrapper">
+        <div class="content-box">
+            {!! $content !!}
+        </div>
+
+        <div class="closing-area">
+            <span style="display: block; margin-bottom: 0;">Hormat Kami,</span>
+            @if($signBase64)
+                <img src="{{ $signBase64 }}" class="sign-img">
+            @else
+                <div style="height: 50px;"></div>
+            @endif
+            <span class="sign-name">Bagus Setiawan</span>
+        </div>
+    </div>
+
+</body>
+</html>

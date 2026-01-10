@@ -61,6 +61,15 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+
+            // --- PERBAIKAN: DUMP PATH YANG AMAN UNTUK CLOUD & LOCAL ---
+            'dump' => [
+                // Menggunakan env() agar di Cloud nanti otomatis menyesuaikan
+                // Default-nya ke C:/xampp/mysql/bin (tanpa slash akhir)
+                'dump_binary_path' => env('DB_DUMP_PATH', 'C:/xampp/mysql/bin'),
+                'use_single_transaction' => true,
+                'timeout' => 60 * 5,
+            ],
         ],
 
         'mariadb' => [
